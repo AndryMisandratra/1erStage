@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #1e1e2f;
+    color: white;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #2e2e42;
+    padding: 20px;
+}
+
+.sidebar .logo {
+    color: #f1c40f;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    margin: 15px 0;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.sidebar nav ul li.active,
+.sidebar nav ul li:hover {
+    background-color: #3a3a52;
+    color: #f1c40f;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e2f;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #2e2e42;
+    border-bottom: 1px solid #444;
+}
+
+.header .admin-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.badge {
+    background-color: #9b59b6;
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+}
+
+.logout {
+    background-color: #e74c3c;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.dashboard-body {
+    display: flex;
+    height: 100%;
+    padding: 20px;
+    gap: 20px;
+}
+
+.calendar-section {
+    flex: 2;
+    background-color: #252539;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.absence-panel {
+    flex: 1;
+    background-color: #2e2e42;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+}
+
+.absence-card {
+    background-color: #3a3a52;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
