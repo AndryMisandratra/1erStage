@@ -48,22 +48,26 @@ const DemandePermission = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
+        const uploadData = new FormData();
+        uploadData.append('file', file);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            const response = await axios.post(
+                'http://localhost:5000/api/upload/permissions', // ✅ chemin corrigé
+                uploadData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }
-            });
+            );
 
             if (response.data.success) {
                 setFormData(prev => ({
                     ...prev,
                     LienPerm: response.data.path
                 }));
-                alert('Fichier téléversé avec succès!');
+                alert('✅ Fichier téléversé avec succès!');
             }
         } catch (error) {
             console.error('Erreur détaillée:', {
@@ -71,9 +75,10 @@ const DemandePermission = () => {
                 response: error.response?.data,
                 config: error.config
             });
-            alert(`Échec du téléversement: ${error.response?.data?.error || error.message}`);
+            alert(`❌ Échec du téléversement: ${error.response?.data?.error || error.message}`);
         }
     };
+
 
 
     const genererLettre = () => {
@@ -102,7 +107,7 @@ const DemandePermission = () => {
             // Coordonnées de l'expéditeur
             const expediteur = [
                 `               ${user.nom} ${user.prenom}, IM : ${user.matricule}`,
-                `         ${user.corps}`,
+                `         ${user.attribution}`,
                 '                                           à                  ',
                 destinataire.split(" ").slice(0, 6).join(" "),
                 `                           ${destinataire.split(" ").slice(6, 8).join(" ")}`,           

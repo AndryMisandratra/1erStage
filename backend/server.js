@@ -10,8 +10,13 @@ const permissionsRoutes = require('./routes/permissions');
 const accountRoutes = require('./routes/account');
 const uploadRoutes = require('./routes/upload');
 const { verifyToken } = require('./middleware/auth');
+const historiqueRoutes = require('./routes/historique');
+
 
 const app = express();
+
+// 🔓 Sert les fichiers PDF (lettres, titres, etc.)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // ⚠️ 1. Autoriser les requêtes cross-origin AVANT les routes
 app.use(cors({
@@ -34,6 +39,8 @@ app.use('/api/upload', uploadRoutes);
 
 // 3. Pour permettre l'accès aux fichiers uploadés
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use('/api/historique',historiqueRoutes );
 
 // 4. Route protégée exemple
 app.get('/api/test', verifyToken, (req, res) => {
