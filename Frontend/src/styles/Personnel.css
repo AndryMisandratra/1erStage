@@ -1,0 +1,48 @@
+.personnel-container {
+  padding: 20px;
+  background: #1e1e2f;
+  color: #fff;
+}
+
+.personnel-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.personnel-form input,
+.personnel-form select,
+.personnel-form button {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.personnel-form button {
+  background: #f1c40f;
+  border: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.personnel-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2e2e42;
+}
+
+.personnel-table th,
+.personnel-table td {
+  padding: 10px;
+  border: 1px solid #444;
+}
+
+.personnel-table button {
+  margin-right: 5px;
+  padding: 5px 8px;
+  background-color: #f1c40f;
+  border: none;
+  color: #000;
+  cursor: pointer;
+}

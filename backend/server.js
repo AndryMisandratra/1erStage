@@ -11,7 +11,9 @@ const accountRoutes = require('./routes/account');
 const uploadRoutes = require('./routes/upload');
 const { verifyToken } = require('./middleware/auth');
 const historiqueRoutes = require('./routes/historique');
-
+const notificationRoutes = require('./routes/notifications');
+const accueilRoutes = require('./routes/accueil');
+const employerRoutes = require('./routes/employers');
 
 const app = express();
 
@@ -41,6 +43,16 @@ app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/historique',historiqueRoutes );
+
+
+app.use('/api/notifications', notificationRoutes);
+
+
+app.use('/api/accueil', accueilRoutes);
+
+
+app.use('/api/employers', employerRoutes);
+
 
 // 4. Route protégée exemple
 app.get('/api/test', verifyToken, (req, res) => {

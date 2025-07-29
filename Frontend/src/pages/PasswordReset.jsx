@@ -4,25 +4,35 @@ import axios from 'axios';
 import '../styles/PasswordReset.css';
 
 const PasswordReset = () => {
-    const [nomUtil, setNomUtil] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [formData, setFormData] = useState({
+        nomUtil: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (newPassword !== confirmPassword) {
+        if (formData.newPassword !== formData.confirmPassword) {
             setError('Les mots de passe ne correspondent pas');
             return;
         }
 
         try {
             const response = await axios.post('http://localhost:5000/api/password/reset', {
-                nomUtil,
-                newPassword
+                nomUtil: formData.nomUtil,
+                newPassword: formData.newPassword
             });
 
             if (response.data.success) {
@@ -35,21 +45,27 @@ const PasswordReset = () => {
     };
 
     return (
-        <div className="reset-container">
-            <div className="reset-card">
-                <h2 className="reset-title">Réinitialisation du mot de passe</h2>
+        <div className="password-reset-container">
+            <div className="password-reset-card">
+                <h2 className="password-reset-title">
+                    <span className="password-reset-icon">🔒</span>
+                    Réinitialisation du mot de passe
+                </h2>
 
-                {error && <div className="reset-error">{error}</div>}
-
-                {success && (
-                    <div className="reset-success">
-                        Mot de passe modifié avec succès! Redirection vers la page de connexion...
+                {error && (
+                    <div className="password-reset-error">
+                        <span>⚠️</span> {error}
                     </div>
                 )}
 
-                {!success && (
-                    <form className="reset-form" onSubmit={handleSubmit}>
-                        <div className="form-group">
+                {success ? (
+                    <div className="password-reset-success">
+                        ✅ Mot de passe modifié avec succès!<br/>
+                        Redirection vers la page de connexion...
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="password-reset-form">
+                        <div className="password-reset-form-group">
                             <label htmlFor="nomUtil">Nom d'utilisateur</label>
                             <input
                                 id="nomUtil"
@@ -57,50 +73,50 @@ const PasswordReset = () => {
                                 type="text"
                                 required
                                 maxLength={10}
-                                value={nomUtil}
-                                onChange={(e) => setNomUtil(e.target.value)}
+                                value={formData.nomUtil}
+                                onChange={handleChange}
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="password-reset-form-group">
                             <label htmlFor="newPassword">Nouveau mot de passe</label>
                             <input
                                 id="newPassword"
                                 name="newPassword"
                                 type="password"
                                 required
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
+                                value={formData.newPassword}
+                                onChange={handleChange}
                             />
-                            <small className="hint">Tous les caractères sont acceptés (espaces inclus)</small>
+                            <small className="password-reset-hint">
+                                Tous les caractères sont acceptés (espaces inclus)
+                            </small>
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirmer le nouveau mot de passe</label>
+                        <div className="password-reset-form-group">
+                            <label htmlFor="confirmPassword">Confirmation</label>
                             <input
                                 id="confirmPassword"
                                 name="confirmPassword"
                                 type="password"
                                 required
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
                             />
                         </div>
 
-                        <button type="submit" className="reset-button">
+                        <button type="submit" className="password-reset-submit">
                             Modifier le mot de passe
                         </button>
 
-                        <div className="reset-footer">
-                            <a
-                                href="/login"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate('/login');
-                                }}
+                        <div className="password-reset-footer">
+                            <button 
+                                type="button"
+                                className="password-reset-link"
+                                onClick={() => navigate('/login')}
                             >
-                                Se connecter
-                            </a>
+                                ← Retour à la connexion
+                            </button>
                         </div>
                     </form>
                 )}

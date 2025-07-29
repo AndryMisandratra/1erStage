@@ -1,0 +1,50 @@
+.accueil-container {
+  display: flex;
+  padding: 20px;
+  gap: 30px;
+}
+
+.calendar-column {
+  width: 30%;
+  background-color: #2e2e42;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.calendar-controls select,
+.calendar-controls input {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.list-column {
+  width: 70%;
+  background-color: #1e1e2f;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.conge-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.conge-table th,
+.conge-table td {
+  padding: 10px;
+  border-bottom: 1px solid #444;
+  text-align: center;
+}
+
+.conge-table button {
+  background-color: #f1c40f;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}

@@ -1,108 +1,59 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+.dashboard-admin {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
 }
 
-.admin-dashboard-container {
-    display: flex;
-    height: 100vh;
-    background-color: #1e1e2f;
-    color: white;
-}
-
+/* Sidebar */
 .sidebar {
-    width: 220px;
-    background-color: #2e2e42;
-    padding: 20px;
+  width: 250px;
+  background-color: #2e2e42;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 
-.sidebar .logo {
-    color: #f1c40f;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 30px;
+.admin-info {
+  margin-bottom: 40px;
 }
 
-.sidebar nav ul {
-    list-style: none;
-    padding: 0;
+.admin-info h2 {
+  margin: 0;
+  font-size: 20px;
 }
 
-.sidebar nav ul li {
-    margin: 15px 0;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
+.logout-button {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #f44336;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 
-.sidebar nav ul li.active,
-.sidebar nav ul li:hover {
-    background-color: #3a3a52;
-    color: #f1c40f;
+.nav-links {
+  display: flex;
+  flex-direction: column;
 }
 
+.nav-links a {
+  text-decoration: none;
+  color: #f1c40f;
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.nav-links a.active {
+  color: #fff;
+  background-color: #5c5c8b;
+  padding-left: 10px;
+}
+
+/* Main content */
 .main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #1e1e2f;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: #2e2e42;
-    border-bottom: 1px solid #444;
-}
-
-.header .admin-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.badge {
-    background-color: #9b59b6;
-    padding: 5px 10px;
-    border-radius: 12px;
-    color: white;
-}
-
-.logout {
-    background-color: #e74c3c;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-}
-
-.dashboard-body {
-    display: flex;
-    height: 100%;
-    padding: 20px;
-    gap: 20px;
-}
-
-.calendar-section {
-    flex: 2;
-    background-color: #252539;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.absence-panel {
-    flex: 1;
-    background-color: #2e2e42;
-    padding: 20px;
-    border-radius: 10px;
-    overflow-y: auto;
-}
-
-.absence-card {
-    background-color: #3a3a52;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
+  flex-grow: 1;
+  padding: 30px;
+  background-color: #ffffff;
+  color: white;
 }

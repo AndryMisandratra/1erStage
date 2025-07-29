@@ -1,36 +1,37 @@
-import React, { useState } from 'react';
-import NouvelArrivant from './NouvelArrivant';
-//import NotificationDemandes from './NotificationDemandes';
-//import CalendrierDivision from './CalendrierDivision';
-import '../styles/DashboardAdmin.css';
+import { Outlet, useNavigate } from 'react-router-dom';
+import '../styles/DashboardAdmin.css'; // Ton style
+import { useEffect, useState } from 'react';
 
 const DashboardAdmin = () => {
-  const [activeTab, setActiveTab] = useState('accueil');
+  const navigate = useNavigate();
+  const [admin, setAdmin] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) setAdmin(user);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   return (
-    <div className="dashboard-admin-container">
-      <header className="dashboard-admin-header">
-        <h1>Tableau de Bord Administrateur</h1>
-      </header>
-      <nav className="dashboard-admin-nav">
-        <button
-          className={activeTab === 'accueil' ? 'active' : ''}
-          onClick={() => setActiveTab('accueil')}
-        >Accueil</button>
-        <button
-          className={activeTab === 'ajouter' ? 'active' : ''}
-          onClick={() => setActiveTab('ajouter')}
-        >Ajouter Employé</button>
-        <button
-          className={activeTab === 'demandes' ? 'active' : ''}
-          onClick={() => setActiveTab('demandes')}
-        >Notifications</button>
+    <div className="admin-dashboard">
+      <nav className="admin-nav">
+        <div className="admin-info">
+          <p>{admin?.prenom} {admin?.nom}</p>
+          <button onClick={handleLogout}>Déconnexion</button>
+        </div>
+        <ul>
+          <li onClick={() => navigate("/DashboardAdmin/acceuil")}>Accueil</li>
+          <li onClick={() => navigate("/DashboardAdmin/notification")}>Notification</li>
+          <li onClick={() => navigate("/DashboardAdmin/personnel")}>Personnel</li>
+        </ul>
       </nav>
 
-      <main className="dashboard-admin-main">
-        {activeTab === 'accueil' && <CalendrierDivision />}
-        {activeTab === 'ajouter' && <NouvelArrivant />}
-        {activeTab === 'demandes' && <NotificationDemandes />}
+      <main className="admin-main">
+        <Outlet />
       </main>
     </div>
   );
