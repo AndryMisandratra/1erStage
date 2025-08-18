@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config(); // Ajoutez cette ligne en haut du fichier
+require('dotenv').config();
 
 
 const token = jwt.sign(

@@ -21,40 +21,41 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    // Modifiez la fonction login dans votre AuthContext
-        const login = async (nomUtil, mdp) => {
-            try {
-                const res = await axios.post('http://localhost:5000/api/auth/login', { 
-                    nomUtil, 
-                    mdp 
-                });
-                
-                const userData = {
-                    ...res.data.user,
-                    isAdmin: res.data.isAdmin
-                };
-                
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(userData));
-                
-                axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-                setUser(userData);
-                setIsAuthenticated(true);
-                setIsAdmin(res.data.isAdmin);
-                
-                return { 
-                    success: true, 
-                    isAdmin: res.data.isAdmin 
-                };
-            } catch (err) {
-                return { 
-                    success: false, 
-                    message: err.response?.data?.message || 'Erreur de connexion' 
-                };
-            }
-        };
+    //Connexion
+    const login = async (nomUtil, mdp) => {
+        try {
+            const res = await axios.post('http://localhost:5000/api/auth/login', { 
+                nomUtil, 
+                mdp 
+            });
+            
+            const userData = {
+                ...res.data.user,
+                isAdmin: res.data.isAdmin
+            };
+            
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+            setUser(userData);
+            setIsAuthenticated(true);
+            setIsAdmin(res.data.isAdmin);
+            
+            return { 
+                success: true, 
+                isAdmin: res.data.isAdmin 
+            };
+        } catch (err) {
+            return { 
+                success: false, 
+                message: err.response?.data?.message || 'Erreur de connexion' 
+            };
+        }
+    };
 
 
+    //Deconnexion
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');

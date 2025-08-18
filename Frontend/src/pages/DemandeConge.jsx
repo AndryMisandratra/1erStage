@@ -1,30 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import jsPDF from "jspdf";
+import { FiUpload, FiDownload, FiSend, FiCalendar, FiFileText, FiUser, FiArrowLeft } from "react-icons/fi";
 import "./../styles/DemandeConge.css";
 
 const DemandeConge = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const [type, setType] = useState("Annuel");
-  const [dateDebut, setDateDebut] = useState("");
-  const [dateFin, setDateFin] = useState("");
-  const [cheminDemande, setCheminDemande] = useState(null);
-  const [nbTitres, setNbTitres] = useState(0);
-  const [titres, setTitres] = useState([]); // Contient les chemins des titres uploadés
-  const [anneesSelectionnees, setAnneesSelectionnees] = useState([]);
+  const [formData, setFormData] = useState({
+    type: "Annuel",
+    dateDebut: "",
+    dateFin: "",
+    cheminDemande: null,
+    nbTitres: 0,
+    titres: [],
+    anneesSelectionnees: []
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [titreUploads, setTitreUploads] = useState([]);
 
-  const matricule = user.matricule;
-
-  // Liste des années possibles (à adapter selon vos besoins)
   const anneesPossibles = Array.from({ length: 20 }, (_, i) => 2025 - i);
 
-  // Calcul de durée de congé
+  // Types de congé disponibles selon le genre
+  const typesPossibles = ["Annuel", "Maladie"];
+  if (user.genre === "Femme") typesPossibles.push("Maternité");
+  if (user.genre === "Homme") typesPossibles.push("Paternité");
+
   const calculerDureeConge = () => {
-    if (type === "Maternité") return 90;
-    if (type === "Paternité") return 15;
-    if (dateDebut && dateFin) {
-      const deb = new Date(dateDebut);
-      const fin = new Date(dateFin);
+    if (formData.type === "Maternité") return 90;
+    if (formData.type === "Paternité") return 15;
+    if (formData.dateDebut && formData.dateFin) {
+      const deb = new Date(formData.dateDebut);
+      const fin = new Date(formData.dateFin);
       const diff = (fin - deb) / (1000 * 60 * 60 * 24) + 1;
       return diff > 0 ? diff : 0;
     }
@@ -33,78 +41,61 @@ const DemandeConge = () => {
 
   const totalCP = calculerDureeConge();
 
-  // Réinitialise la liste des titres quand nbTitres change
   useEffect(() => {
-    setTitres(Array(nbTitres).fill(null));
-  }, [nbTitres]);
+    setTitreUploads(Array(formData.nbTitres).fill(false));
+  }, [formData.nbTitres]);
 
-  // Upload lettre de demande (lettre PDF)
-  const handleLettreUpload = async (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileUpload = async (e, isTitre = false, index = null) => {
     const file = e.target.files[0];
     if (!file || file.type !== "application/pdf") {
-      alert("Veuillez sélectionner un fichier PDF valide.");
-      return;
+        alert("Veuillez sélectionner un fichier PDF valide.");
+        return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
+    if (file.size > 5 * 1024 * 1024) {
+        alert("Le fichier ne doit pas dépasser 5MB");
+        return;
+    }
+
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+
+    const endpoint = isTitre ? "titres" : "demandes";
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/upload/demandes",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
+        const res = await axios.post(
+            `http://localhost:5000/api/upload/${endpoint}`,
+            uploadData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        if (res.data.success) {
+            if (isTitre) {
+                const newTitres = [...formData.titres];
+                newTitres[index] = res.data.path;
+                const newTitreUploads = [...titreUploads];
+                newTitreUploads[index] = true;
+                setFormData(prev => ({ ...prev, titres: newTitres }));
+                setTitreUploads(newTitreUploads);
+            } else {
+                setFormData(prev => ({ ...prev, cheminDemande: res.data.path }));
+                setFileUploaded(true);
+            }
         }
-      );
-
-      if (res.data.success) {
-        setCheminDemande(res.data.path);
-        alert("Lettre téléversée avec succès.");
-      } else {
-        alert("Échec du téléversement de la lettre.");
-      }
     } catch (err) {
-      console.error(err);
-      alert("Erreur lors du téléversement de la lettre.");
+        console.error(err);
+        alert(`Erreur: ${err.response?.data?.error || err.message}`);
     }
-  };
+};
 
-  // Upload un titre individuel (PDF)
-  const handleTitreChange = async (index, file) => {
-    if (!file || file.type !== "application/pdf") {
-      alert("Veuillez sélectionner un fichier PDF valide.");
-      return;
-    }
 
-    const formData = new FormData();
-    formData.append("file", file);
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/upload/titres",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      if (res.data.success) {
-        const newTitres = [...titres];
-        newTitres[index] = res.data.path;
-        setTitres(newTitres);
-        alert(`Titre ${index + 1} téléversé.`);
-      } else {
-        alert(`Échec du téléversement du titre ${index + 1}.`);
-      }
-    } catch (err) {
-      console.error(err);
-      alert(`Erreur lors du téléversement du titre ${index + 1}`);
-    }
-  };
-
-  // Génération de la lettre PDF modèle (facultatif)
-  const genererPDF = () => {
+const genererPDF = () => {
     const doc = new jsPDF();
 
     // En-tête
@@ -148,173 +139,274 @@ const DemandeConge = () => {
     doc.save(`demande_conge_${matricule}.pdf`);
   };
 
-  // Types de congé disponibles selon le genre
-  const typesPossibles = ["Annuel", "Maladie"];
-  if (user.genre === "Femme") typesPossibles.push("Maternité");
-  if (user.genre === "Homme") typesPossibles.push("Paternité");
-
-  // Soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!cheminDemande) {
-      alert("Veuillez téléverser la lettre de demande (PDF).");
-      return;
-    }
-
-    if (type === "Annuel" && titres.some((t) => !t)) {
-      alert("Veuillez téléverser tous les titres requis.");
-      return;
-    }
-
-    const payload = {
-      TypeC: type,
-      TotalCP: totalCP,
-      DateDemCong: new Date().toISOString().split("T")[0],
-      DebC: dateDebut,
-      FinC: dateFin,
-      StatueC: "En attente",
-      Matricule: matricule,
-      CheminDem: cheminDemande,
-      TitresPaths: titres,
-      Annees: anneesSelectionnees,
-    };
+    setIsSubmitting(true);
 
     try {
-      await axios.post("http://localhost:5000/api/conges", payload);
-      alert("Demande de congé envoyée avec succès !");
-      // Reset form
-      setType("Annuel");
-      setDateDebut("");
-      setDateFin("");
-      setCheminDemande(null);
-      setNbTitres(0);
-      setTitres([]);
-      setAnneesSelectionnees([]);
+      if (!formData.cheminDemande) {
+        throw new Error("Veuillez téléverser la lettre de demande");
+      }
+
+      if (formData.type === "Annuel" && formData.titres.some(t => !t)) {
+        throw new Error("Veuillez téléverser tous les titres requis");
+      }
+
+      const payload = {
+        TypeC: formData.type,
+        TotalCP: totalCP,
+        DateDemCong: new Date().toISOString().split("T")[0],
+        DebC: formData.dateDebut,
+        FinC: formData.dateFin,
+        StatueC: "En attente",
+        Matricule: user.matricule,
+        CheminDem: formData.cheminDemande,
+        TitresPaths: formData.titres,
+        Annees: formData.anneesSelectionnees,
+      };
+
+      const response = await axios.post("http://localhost:5000/api/conges", payload);
+      
+      if (response.data.success) {
+        alert("✅ Demande envoyée avec succès !");
+        // Reset form
+        setFormData({
+          type: "Annuel",
+          dateDebut: "",
+          dateFin: "",
+          cheminDemande: null,
+          nbTitres: 0,
+          titres: [],
+          anneesSelectionnees: []
+        });
+        setFileUploaded(false);
+        setTitreUploads([]);
+      }
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de l'envoi de la demande");
+      alert(`❌ ${err.response?.data?.message || err.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleReturn = () => {
+    navigate('/DashboardEmployer');
+  };
+
   return (
-    <div className="form-conge-container">
-      <h2>Demande de congé</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        {/* Type de congé */}
-        <div className="form-group">
-          <label>Type de congé :</label>
-          <select value={type} onChange={(e) => setType(e.target.value)} required>
-            {typesPossibles.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
+    <div className="conge-container">
+      <div className="conge-header">
+        <div className="header-top">
+            <button 
+                className="back-button"
+                onClick={handleReturn}
+            >
+                <FiArrowLeft /> Retour au tableau de bord
+            </button>    
         </div>
+        <h1><FiCalendar /> Demande de Congé</h1>
+        <p>Formulaire de demande d'autorisation d'absence</p>
+      </div>
 
-        {/* Dates */}
-        <div className="form-group">
-          <label>Date début :</label>
-          <input
-            type="date"
-            value={dateDebut}
-            onChange={(e) => setDateDebut(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Date fin :</label>
-          <input
-            type="date"
-            value={dateFin}
-            onChange={(e) => setDateFin(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Nombre de jours :</label>
-          <input type="number" value={totalCP} readOnly />
-        </div>
-
-        {/* Pour les congés annuels seulement */}
-        {type === "Annuel" && (
-          <>
+      <div className="info-box">
+        <h3>Instructions importantes :</h3>
+        <ul>
+          <li>Les congés annuels nécessitent l'upload des titres correspondants</li>
+          <li>Les fichiers doivent être au format PDF (max 5MB)</li>
+          <li>Pour les congés maladie/maternité/paternité, joindre les justificatifs médicaux</li>
+          <li>Toute fausse déclaration entraîne le rejet de la demande</li>
+        </ul>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="conge-form">
+        <div className="form-grid">
+          <div className="form-card">
+            <h2><FiUser /> Informations Personnelles</h2>
+            
             <div className="form-group">
-              <label>Années concernées :</label>
-              <select
-                multiple
-                value={anneesSelectionnees}
-                onChange={(e) => {
-                  const options = [...e.target.selectedOptions];
-                  const values = options.map((opt) => opt.value);
-                  setAnneesSelectionnees(values);
-                }}
-                required
-              >
-                {anneesPossibles.map((annee) => (
-                  <option key={annee} value={annee}>
-                    {annee}
-                  </option>
-                ))}
-              </select>
-              <small>Maintenez Ctrl/Cmd pour sélectionner plusieurs années</small>
-            </div>
-
-            <div className="form-group">
-              <label>Nombre de titres à joindre :</label>
-              <input
-                type="number"
-                min="0"
-                value={nbTitres}
-                onChange={(e) => setNbTitres(parseInt(e.target.value) || 0)}
+              <label>Nom complet</label>
+              <input 
+                type="text" 
+                value={`${user.nom} ${user.prenom}`} 
+                readOnly 
+                className="readonly"
               />
             </div>
+            
+            <div className="form-group">
+              <label>Matricule</label>
+              <input 
+                type="text" 
+                value={user.matricule} 
+                readOnly 
+                className="readonly"
+              />
+            </div>
+          </div>
 
-            {Array.from({ length: nbTitres }).map((_, index) => (
-              <div key={index} className="form-group">
-                <label>Titre {index + 1} (PDF) :</label>
+          <div className="form-card">
+            <h2><FiCalendar /> Détails du Congé</h2>
+            
+            <div className="form-group">
+              <label>Type de congé <span className="required">*</span></label>
+              <select 
+                name="type" 
+                value={formData.type} 
+                onChange={handleChange} 
+                required
+              >
+                {typesPossibles.map(t => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Date de début <span className="required">*</span></label>
+                <input
+                  type="date"
+                  name="dateDebut"
+                  value={formData.dateDebut}
+                  onChange={handleChange}
+                  required
+                  min={new Date().toISOString().split("T")[0]}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Date de fin <span className="required">*</span></label>
+                <input
+                  type="date"
+                  name="dateFin"
+                  value={formData.dateFin}
+                  onChange={handleChange}
+                  required
+                  min={formData.dateDebut || new Date().toISOString().split("T")[0]}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Durée (jours)</label>
+              <input 
+                type="number" 
+                value={totalCP} 
+                readOnly 
+                className="readonly"
+              />
+            </div>
+          </div>
+
+          {formData.type === "Annuel" && (
+            <div className="form-card">
+              <h2><FiFileText /> Titres de Congé</h2>
+              
+              <div className="form-group">
+                <label>Années concernées <span className="required">*</span></label>
+                <select
+                  multiple
+                  name="anneesSelectionnees"
+                  value={formData.anneesSelectionnees}
+                  onChange={(e) => {
+                    const options = [...e.target.selectedOptions];
+                    const values = options.map(opt => opt.value);
+                    setFormData(prev => ({ ...prev, anneesSelectionnees: values }));
+                  }}
+                  required
+                >
+                  {anneesPossibles.map(annee => (
+                    <option key={annee} value={annee}>{annee}</option>
+                  ))}
+                </select>
+                <small className="hint">Maintenez Ctrl/Cmd pour sélection multiple</small>
+              </div>
+
+              <div className="form-group">
+                <label>Nombre de titres à joindre</label>
+                <input
+                  type="number"
+                  name="nbTitres"
+                  min="0"
+                  value={formData.nbTitres}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {Array.from({ length: formData.nbTitres }).map((_, index) => (
+                <div key={index} className="form-group file-upload">
+                  <label>
+                    <FiUpload /> Titre {index + 1} <span className="required">*</span>
+                  </label>
+                  <div className="upload-area">
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={(e) => handleFileUpload(e, true, index)}
+                      required
+                      id={`titre-upload-${index}`}
+                    />
+                    <label htmlFor={`titre-upload-${index}`} className="upload-label">
+                      {titreUploads[index] ? 'Fichier téléversé ✓' : 'Choisir un fichier'}
+                    </label>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="form-card">
+            <h2><FiFileText /> Documents Requis</h2>
+            
+            <div className="form-group file-upload">
+              <label>
+                <FiUpload /> Lettre de demande (PDF) <span className="required">*</span>
+              </label>
+              <div className="upload-area">
                 <input
                   type="file"
                   accept=".pdf"
-                  onChange={(e) => handleTitreChange(index, e.target.files[0])}
+                  onChange={handleFileUpload}
                   required
+                  id="lettre-upload"
                 />
-                {titres[index] && (
-                  <span style={{ color: "green", fontWeight: "bold" }}>
-                    Téléversé
-                  </span>
-                )}
+                <label htmlFor="lettre-upload" className="upload-label">
+                  {fileUploaded ? 'Fichier téléversé ✓' : 'Choisir un fichier'}
+                </label>
               </div>
-            ))}
-          </>
-        )}
-
-        {/* Lettre de demande */}
-        <div className="form-group">
-          <label>Lettre de demande (PDF) :</label>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleLettreUpload}
-            required
-          />
-          {cheminDemande && (
-            <p style={{ color: "green", fontWeight: "bold" }}>
-              Lettre téléversée
-            </p>
-          )}
+            </div>
+          </div>
         </div>
 
-        <div className="buttons">
-          <button type="button" onClick={genererPDF}>
-            Générer modèle de lettre
+        <div className="action-buttons">
+          <button 
+            type="button" 
+            className="generate-btn"
+            onClick={genererPDF}
+            disabled={!formData.dateDebut || !formData.dateFin}
+          >
+            <FiDownload /> Générer modèle
           </button>
-          <button type="submit">Envoyer la demande</button>
+          
+          <button 
+            type="submit" 
+            className="submit-btn"
+            disabled={isSubmitting || !fileUploaded || 
+              (formData.type === "Annuel" && formData.titres.some(t => !t))}
+          >
+            {isSubmitting ? 'Envoi en cours...' : (
+              <>
+                <FiSend /> Envoyer la demande
+              </>
+            )}
+          </button>
         </div>
       </form>
+
+      
     </div>
   );
 };

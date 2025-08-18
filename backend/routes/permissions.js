@@ -6,7 +6,6 @@ router.post('/', async (req, res) => {
     try {
         const { TypeP, DateDemPerm, DebP, FinP, NbrjP, Motif, LienPerm, Matricule } = req.body;
         
-        // Validation
         if (NbrjP > 3) {
             return res.status(400).json({ 
                 success: false, 

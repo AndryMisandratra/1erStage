@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaSignOutAlt, FaHome, FaHistory, FaUmbrellaBeach, FaClock } from 'react-icons/fa';
 import '../styles/DashboardEmployer.css';
 
 const DashboardEmployer = () => {
@@ -33,120 +34,134 @@ const DashboardEmployer = () => {
     };
 
     return (
-        <div className="dashboard-container">
-            <header className="dashboard-header">
-                <h1>Tableau de Bord Employé</h1>
-                <div className="user-info">
-                    <span>{userData?.prenom} {userData?.nom}</span>
-                    <button onClick={handleLogout} className="logout-btn">Déconnexion</button>
+        <div className="employer-dashboard">
+            {/* Top Navigation Bar */}
+            <nav className="top-nav">
+                <div className="nav-left">
+                    <h1>Espace Employé</h1>
                 </div>
-            </header>
-
-            <nav className="dashboard-nav">
-                <button 
-                    className={activeTab === 'accueil' ? 'active' : ''}
-                    onClick={() => setActiveTab('accueil')}
-                >
-                    Accueil
-                </button>
-                <button 
-                    className={activeTab === 'historique' ? 'active' : ''}
-                    onClick={() => setActiveTab('historique')}
-                >
-                    Historique
-                </button>
+                <div className="nav-center">
+                    <button 
+                        className={`nav-btn ${activeTab === 'accueil' ? 'active' : ''}`} 
+                        onClick={() => setActiveTab('accueil')}
+                    >
+                        <FaHome className="nav-icon" />
+                        <span>Accueil</span>
+                    </button>
+                    <button 
+                        className={`nav-btn ${activeTab === 'historique' ? 'active' : ''}`} 
+                        onClick={() => setActiveTab('historique')}
+                    >
+                        <FaHistory className="nav-icon" />
+                        <span>Historique</span>
+                    </button>
+                </div>
+                <div className="nav-right">
+                    <div className="user-info">
+                        <span className="user-name">{userData?.prenom} {userData?.nom}</span>
+                        <button onClick={handleLogout} className="logout-btn">
+                            <FaSignOutAlt className="logout-icon" />
+                            <span>Déconnexion</span>
+                        </button>
+                    </div>
+                </div>
             </nav>
 
-            <main className="dashboard-main">
+            {/* Main Content */}
+            <main className="employer-main">
                 {activeTab === 'accueil' && (
-                    <div className="actions-container">
-                        <div 
-                            className="action-card" 
-                            onClick={() => navigate('/demande-conge')}
-                        >
-                            <h2>Demander un Congé</h2>
-                            <p>Cliquez pour faire une demande de congé</p>
-                        </div>
+                    <div className="dashboard-home">
+                        <h2 className="welcome-title">Bienvenue, {userData?.prenom} !</h2>
+                        <p className="welcome-subtitle">Que souhaitez-vous faire aujourd'hui ?</p>
                         
-                        <div 
-                            className="action-card"
-                            onClick={() => navigate('/demande-permission')}
-                        >
-                            <h2>Demander une Permission</h2>
-                            <p>Cliquez pour faire une demande de permission</p>
+                        <div className="action-cards">
+                            <div className="action-card" onClick={() => navigate('/demande-conge')}>
+                                <div className="card-icon">
+                                    <FaUmbrellaBeach />
+                                </div>
+                                <h3>Demander un Congé</h3>
+                                <p>Soumettre une nouvelle demande de congé</p>
+                            </div>
+
+                            <div className="action-card" onClick={() => navigate('/demande-permission')}>
+                                <div className="card-icon">
+                                    <FaClock />
+                                </div>
+                                <h3>Demander une Permission</h3>
+                                <p>Soumettre une demande de permission d'absence</p>
+                            </div>
                         </div>
                     </div>
                 )}
 
                 {activeTab === 'historique' && (
-                    <div className="history-container">
-                        <h2>Historique des Demandes</h2>
+                    <div className="history-section">
+                        <div className="section-header">
+                            <h2>Historique des Demandes</h2>
+                            <p>Consultez l'état de vos demandes précédentes</p>
+                        </div>
 
                         {historique.length === 0 ? (
-                            <p>Aucune demande trouvée.</p>
+                            <div className="empty-state">
+                                <p>Aucune demande trouvée dans votre historique.</p>
+                            </div>
                         ) : (
-                            <table className="historique-table">
-                                <thead>
-                                    <tr>
-                                        <th>Type</th>
-                                        <th>Catégorie</th>
-                                        <th>Date Demande</th>
-                                        <th>Début</th>
-                                        <th>Fin</th>
-                                        <th>Jours</th>
-                                        <th>Statut</th>
-                                        <th>Lettre</th>
-                                        <th>Justificatifs</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {historique.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>{item.type}</td>
-                                            <td>{item.TypeC}</td>
-                                            <td>{item.date_demande}</td>
-                                            <td>{item.debut}</td>
-                                            <td>{item.fin}</td>
-                                            <td>{item.jours}</td>
-                                            <td>{item.statut}</td>
-                                            <td>
-                                                {item.lettre ? (
-                                                    <a
-                                                        href={`http://localhost:5000${item.lettre}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        Voir
-                                                    </a>
-                                                ) : (
-                                                    "-"
-                                                )}
-                                            </td>
-                                            <td>
-                                                {item.justificatifs?.length > 0 ? (
-                                                    item.justificatifs.map((j, i) => (
-                                                        <div key={i}>
-                                                            <a
-                                                                href={`http://localhost:5000${j}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                Titre {i + 1}
-                                                            </a>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    "-"
-                                                )}
-                                            </td>
+                            <div className="history-table-container">
+                                <table className="history-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="type-col">Type</th>
+                                            <th className="category-col">Catégorie</th>
+                                            <th className="date-col">Date Demande</th>
+                                            <th className="date-col">Début</th>
+                                            <th className="date-col">Fin</th>
+                                            <th className="days-col">Jours</th>
+                                            <th className="status-col">Statut</th>
+                                            <th className="docs-col">Documents</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {historique.map((item, index) => (
+                                            <tr key={index}>
+                                                <td className="type-col" data-label="Type">{item.type}</td>
+                                                <td className="category-col" data-label="Catégorie">{item.TypeC || '-'}</td>
+                                                <td className="date-col" data-label="Date Demande">{item.date_demande}</td>
+                                                <td className="date-col" data-label="Début">{item.debut}</td>
+                                                <td className="date-col" data-label="Fin">{item.fin}</td>
+                                                <td className="days-col" data-label="Jours">{item.jours}</td>
+                                                <td className="status-col" data-label="Statut">
+                                                    <span className={`status-badge ${
+                                                        item.statut.toLowerCase() === 'rejeté' ? 'rejected' :
+                                                        item.statut.toLowerCase() === 'approuvé' ? 'approved' :
+                                                        'pending'
+                                                    }`}>
+                                                        {item.statut}
+                                                    </span>
+                                                </td>
+                                                <td className="docs-col" data-label="Documents">
+                                                    <div className="document-links">
+                                                        {item.lettre ? (
+                                                            <a href={`http://localhost:5000${item.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                                                                Lettre
+                                                            </a>
+                                                        ) : "-"}
+                                                        {item.justificatifs?.length > 0 && (
+                                                            item.justificatifs.map((j, i) => (
+                                                                <a key={i} href={`http://localhost:5000${j}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                                                                    Justif. {i + 1}
+                                                                </a>
+                                                            ))
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         )}
                     </div>
                 )}
-
             </main>
         </div>
     );

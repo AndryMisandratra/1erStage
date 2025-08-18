@@ -14,11 +14,13 @@ const CreateAccount = () => {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
+        const digitsOnly = e.target.value.replace(/\D/g, '').slice(0,6);
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
+        setFormData({ ...formData, matricule: digitsOnly });
     };
 
     const handleSubmit = async (e) => {
@@ -69,10 +71,6 @@ const CreateAccount = () => {
                                 required
                                 value={formData.matricule}
                                 onChange={handleChange}
-                                onChange={(e) => {
-                                    const digitsOnly = e.target.value.replace(/\D/g, '').slice(0,6);
-                                    setFormData({ ...formData, matricule: digitsOnly });
-                                }}
                             />
                         </div>
 

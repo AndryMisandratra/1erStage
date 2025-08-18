@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
+import { FiUpload, FiDownload, FiSend, FiCalendar, FiFileText, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
 import '../styles/DemandePermission.css';
 
 const DemandePermission = () => {
@@ -16,16 +18,21 @@ const DemandePermission = () => {
         Matricule: user.matricule,
         StatueP: 'En attente'
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [fileUploaded, setFileUploaded] = useState(false);
 
-    // Calcul du nombre de jours
     useEffect(() => {
         if (formData.DebP && formData.FinP) {
             const debut = new Date(formData.DebP);
             const fin = new Date(formData.FinP);
-            const jours = Math.ceil((fin - debut) / (1000 * 60 * 60 * 24)) + 1;
+            const diffTime = fin - debut;
+            const jours = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
             
             if (jours > 3) {
                 alert('La permission ne peut excéder 3 jours');
+                setFormData(prev => ({ ...prev, FinP: '', NbrjP: 0 }));
+            } else if (jours < 1) {
+                alert('La date de fin doit être après la date de début');
                 setFormData(prev => ({ ...prev, FinP: '', NbrjP: 0 }));
             } else {
                 setFormData(prev => ({ ...prev, NbrjP: jours }));
@@ -42,9 +49,13 @@ const DemandePermission = () => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Vérification du type
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Le fichier ne doit pas dépasser 5MB');
+            return;
+        }
+
         if (file.type !== 'application/pdf') {
-            alert('Veuillez sélectionner un fichier PDF');
+            alert('Seuls les fichiers PDF sont acceptés');
             return;
         }
 
@@ -53,7 +64,7 @@ const DemandePermission = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/upload/permissions', // ✅ chemin corrigé
+                'http://localhost:5000/api/upload/permissions',
                 uploadData,
                 {
                     headers: {
@@ -67,19 +78,13 @@ const DemandePermission = () => {
                     ...prev,
                     LienPerm: response.data.path
                 }));
-                alert('✅ Fichier téléversé avec succès!');
+                setFileUploaded(true);
             }
         } catch (error) {
-            console.error('Erreur détaillée:', {
-                error: error.message,
-                response: error.response?.data,
-                config: error.config
-            });
-            alert(`❌ Échec du téléversement: ${error.response?.data?.error || error.message}`);
+            console.error('Erreur de téléversement:', error);
+            alert(`Erreur: ${error.response?.data?.error || error.message}`);
         }
     };
-
-
 
     const genererLettre = () => {
         try {
@@ -97,17 +102,21 @@ const DemandePermission = () => {
             };
 
             // En-tête
-            doc.text(`Antananarivo, ${formatDate(formData.DateDemPerm) || ''}`, 110, y);
+            doc.text(`Antananarivo, ${formatDate(formData.DateDemPerm) || ''}`, 115, y);
             
             // Destinataire
-            const destinataire = user.IdDiv === 1 ?
-                'Madame LA COMMISSAIRE FINANCIER DU TRIBUNAL FINANCIER D\'ANTANANARIVO':
-                'Monsieur LE PRESIDENT DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
+            let destinataire ;
+            if (user.IdDiv === 1){
+                destinataire = 'Monsieur LE PRESIDENT DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
+            }else {
+                destinataire =  'Madame LA COMMISSAIRE FINANCIER DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
+            }
+                
 
             // Coordonnées de l'expéditeur
             const expediteur = [
-                `               ${user.nom} ${user.prenom}, IM : ${user.matricule}`,
-                `         ${user.attribution}`,
+                `              ${user.nom} ${user.prenom}, IM : ${user.matricule}`,
+                `                                    ${user.attribution}`,
                 '                                           à                  ',
                 destinataire.split(" ").slice(0, 6).join(" "),
                 `                           ${destinataire.split(" ").slice(6, 8).join(" ")}`,           
@@ -158,139 +167,203 @@ const DemandePermission = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Vérification du nombre de jours
-        if (formData.NbrjP > 3) {
-            alert('La permission ne peut excéder 3 jours');
-            return;
-        }
-
-        // Vérification que le fichier est bien téléversé
-        if (!formData.LienPerm) {
-            alert("Veuillez téléverser votre demande en PDF avant d'envoyer.");
-            return;
-        }
+        setIsSubmitting(true);
 
         try {
-            // Envoi de la demande vers le bon endpoint
+            // Validation
+            if (formData.NbrjP > 3) {
+                throw new Error('La permission ne peut excéder 3 jours');
+            }
+
+            if (!formData.LienPerm) {
+                throw new Error('Veuillez téléverser votre demande en PDF');
+            }
+
+            // Envoi
             const response = await axios.post('http://localhost:5000/api/permissions', formData);
 
             if (response.data.success) {
-                alert('✅ Demande de permission envoyée avec succès!');
-                // Réinitialiser le formulaire si besoin
+                alert('✅ Demande envoyée avec succès !');
+                // Réinitialisation
                 setFormData({
-                    TypeP: 'Permission d\'absence',
-                    DateDemPerm: new Date().toISOString().split('T')[0],
+                    ...formData,
                     DebP: '',
                     FinP: '',
                     NbrjP: 0,
                     Motif: '',
-                    LienPerm: '',
-                    Matricule: user.matricule,
-                    StatueP: 'En attente'
+                    LienPerm: ''
                 });
-            } else {
-                alert('⚠️ Une erreur est survenue : ' + response.data.message);
+                setFileUploaded(false);
             }
         } catch (err) {
-            console.error('Erreur envoi demande:', err);
-            const msg = err.response?.data?.message || 'Erreur lors de l\'envoi de la demande';
-            alert(`❌ ${msg}`);
+            console.error('Erreur:', err);
+            alert(`❌ ${err.response?.data?.message || err.message}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
+    
+    const navigate = useNavigate();
 
+    const handleReturn = () => {
+        navigate('/DashboardEmployer');
+    };
 
     return (
-        <div className="demande-permission-container">
-            <h1>Demande de Permission</h1>
+        <div className="permission-container">
+            <div className="permission-header">
+                <div className="header-top">
+                    <button 
+                        
+                        className="back-button"
+                        onClick={handleReturn}
+                    >
+                        <FiArrowLeft /> Retour au tableau de bord
+                    </button>    
+                </div>
+                <h1><FiCalendar /> Demande de Permission</h1>
+                <p>Formulaire de demande d'autorisation d'absence</p>
+            </div>
+
+            <div className="info-box">
+                <h3>Instructions importantes :</h3>
+                <ul>
+                    <li>La durée maximale est de 3 jours consécutifs</li>
+                    <li>Le fichier joint doit être au format PDF</li>
+                    <li>Toute fausse déclaration entraîne le rejet de la demande</li>
+                </ul>
+            </div>
             
-            <form onSubmit={handleSubmit}>
-                <div className="form-section">
-                    <div className="form-group">
-                        <label>Date de demande:</label>
-                        <input 
-                            type="date" 
-                            name="DateDemPerm" 
-                            value={formData.DateDemPerm} 
-                            readOnly
-                        />
+            <form onSubmit={handleSubmit} className="permission-form">
+                <div className="form-grid">
+                    <div className="form-card">
+                        <h2><FiFileText /> Informations de base</h2>
+                        
+                        <div className="form-group">
+                            <label>Date de demande</label>
+                            <input 
+                                type="date" 
+                                name="DateDemPerm" 
+                                value={formData.DateDemPerm} 
+                                readOnly
+                                className="readonly"
+                            />
+                        </div>
+                        
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label>Date de début <span className="required">*</span></label>
+                                <input 
+                                    type="date" 
+                                    name="DebP" 
+                                    value={formData.DebP} 
+                                    onChange={handleChange}
+                                    required
+                                    min={formData.DateDemPerm}
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>Date de fin <span className="required">*</span></label>
+                                <input 
+                                    type="date" 
+                                    name="FinP" 
+                                    value={formData.FinP} 
+                                    onChange={handleChange}
+                                    required
+                                    min={formData.DebP || formData.DateDemPerm}
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="form-group">
+                            <label>Nombre de jours</label>
+                            <input 
+                                type="number" 
+                                name="NbrjP" 
+                                value={formData.NbrjP} 
+                                readOnly
+                                className="readonly"
+                            />
+                        </div>
                     </div>
                     
-                    <div className="form-group">
-                        <label>Date de début:</label>
-                        <input 
-                            type="date" 
-                            name="DebP" 
-                            value={formData.DebP} 
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    
-                    <div className="form-group">
-                        <label>Date de fin:</label>
-                        <input 
-                            type="date" 
-                            name="FinP" 
-                            value={formData.FinP} 
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    
-                    <div className="form-group">
-                        <label>Nombre de jours:</label>
-                        <input 
-                            type="number" 
-                            name="NbrjP" 
-                            value={formData.NbrjP} 
-                            readOnly
-                            min="1"
-                            max="3"
-                        />
-                    </div>
-                    
-                    <div className="form-group">
-                        <label>Motif:</label>
-                        <input 
-                            type="text" 
-                            name="Motif" 
-                            value={formData.Motif} 
-                            onChange={handleChange}
-                            required
-                            placeholder="Raison personnelle / Familiale / etc."
-                        />
+                    <div className="form-card">
+                        <h2><FiAlertTriangle /> Détails complémentaires</h2>
+                        
+                        <div className="form-group">
+                            <label>Motif <span className="required">*</span></label>
+                            <select
+                                name="Motif" 
+                                value={formData.Motif} 
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Sélectionnez un motif</option>
+                                <option value="Familiale">familiale</option>
+                                <option value="Personnelle">personnelle</option>
+                                <option value="Médicale">médicale</option>
+                                <option value="Officielle">Mission officielle</option>
+                                <option value="Décè">Décè</option>
+                            </select>
+                        </div>
+                        
+                        {formData.Motif === 'Autre' && (
+                            <div className="form-group">
+                                <label>Précisez le motif</label>
+                                <input 
+                                    type="text" 
+                                    name="MotifPrecision" 
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        )}
+                        
+                        <div className="form-group file-upload">
+                            <label>
+                                <FiUpload /> Joindre la lettre (PDF) <span className="required">*</span>
+                            </label>
+                            <div className="upload-area">
+                                <input 
+                                    type="file" 
+                                    accept=".pdf"
+                                    onChange={handleFileUpload}
+                                    required
+                                    id="file-upload"
+                                />
+                                <label htmlFor="file-upload" className="upload-label">
+                                    {fileUploaded ? 'Fichier téléversé ✓' : 'Choisir un fichier'}
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div className="form-section">
-                    <div className="form-group">
-                        <label>Lettre de demande (PDF):</label>
-                        <input 
-                            type="file" 
-                            accept=".pdf"
-                            onChange={handleFileUpload}
-                            required
-                        />
-                    </div>
+                <div className="action-buttons">
+                    <button 
+                        type="button" 
+                        className="generate-btn"
+                        onClick={genererLettre}
+                        disabled={!formData.DebP || !formData.FinP}
+                    >
+                        <FiDownload /> Générer le modèle
+                    </button>
                     
-                    <div className="button-group">
-                        <button 
-                            type="button" 
-                            className="generate-btn"
-                            onClick={genererLettre}
-                        >
-                            Générer la lettre
-                        </button>
-                        <button 
-                            type="submit" 
-                            className="submit-btn"
-                        >
-                            Envoyer la demande
-                        </button>
-                    </div>
+                    <button 
+                        type="submit" 
+                        className="submit-btn"
+                        disabled={isSubmitting || !fileUploaded}
+                    >
+                        {isSubmitting ? 'Envoi en cours...' : (
+                            <>
+                                <FiSend /> Envoyer la demande
+                            </>
+                        )}
+                    </button>
                 </div>
             </form>
+            
+            
         </div>
     );
 };

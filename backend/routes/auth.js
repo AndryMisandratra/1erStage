@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const router = express.Router();
 
+//Route api/auth/login
 router.post('/login', async (req, res) => {
     const { nomUtil, mdp } = req.body;
     
@@ -16,7 +17,7 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        // 1. Recherche de l'utilisateur par NomUtil (sensible à la casse)
+        //Recherche de l'utilisateur par NomUtil (sensible à la casse)
         const [rows] = await db.query(
             `SELECT e.*, d.Libelle as division_libelle 
              FROM employer e 
@@ -25,9 +26,8 @@ router.post('/login', async (req, res) => {
             [nomUtil]
         );
 
-        // 2. Gestion des 4 cas demandés
+        // Gestion utilisateur
         if (rows.length === 0) {
-            // Cas 2 et 3: NomUtil non trouvé
             const [anyUser] = await db.query('SELECT 1 FROM employer LIMIT 1');
             return res.status(401).json({
                 success: false,
@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // 3. Vérification mot de passe (sensible à la casse)
+        //Vérification mot de passe
         const user = rows[0];
         if (user.Mdp !== mdp) {
             return res.status(401).json({ 
@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // 4. Connexion réussie
+        //Connexion réussie
         const token = jwt.sign(
             { 
                 matricule: user.Matricule,
