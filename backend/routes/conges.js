@@ -14,7 +14,8 @@ router.post('/', async (req, res) => {
             StatueC,
             Matricule,
             CheminDem,       // reçu directement depuis frontend
-            TitresPaths = [] // tableau de chemins de titres (pour "Annuel")
+            TitresPaths = [],// tableau de chemins de titres (pour "Annuel")
+            CheminOrd        // chemin de l’ordonnance (pour Maladie, Maternité, Paternité)
         } = req.body;
 
         if (!CheminDem) {
@@ -30,7 +31,7 @@ router.post('/', async (req, res) => {
 
         const newIdC = result.insertId;
 
-        // 🧾 Si "Annuel", enregistrer chaque titre dans TITRE et lier via UTILISER
+        // 🧾 Si "Annuel", enregistrer chaque titre
         if (TypeC === 'Annuel' && TitresPaths.length > 0) {
             for (const cheminTitre of TitresPaths) {
                 const [titreResult] = await db.query(
@@ -44,6 +45,16 @@ router.post('/', async (req, res) => {
                     [newIdC, idTitre]
                 );
             }
+        } 
+        else if (['Maladie', 'Maternité', 'Paternité'].includes(TypeC)) {
+            if (!CheminOrd) {
+                return res.status(400).json({ error: 'Ordonnance obligatoire pour ce type de congé' });
+            }
+
+            await db.query(
+                'INSERT INTO ordonnance (IdC, CheminOrd) VALUES (?, ?)',
+                [newIdC, CheminOrd]
+            );
         }
 
         return res.json({ success: true, message: 'Demande de congé enregistrée avec succès' });
@@ -53,5 +64,6 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: 'Erreur interne lors de l\'enregistrement' });
     }
 });
+
 
 module.exports = router;

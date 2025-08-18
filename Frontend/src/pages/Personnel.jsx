@@ -18,13 +18,56 @@ const Personnel = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const idDiv = user?.idDiv;
 
+  // 🔹 Corps et Attributions possibles selon la division
+  const corpsOptions = idDiv === 1
+    ? [
+        "MAGISTRAT",
+        "GREFFIER DES SERVICES JUDICIERE",
+        "GREFFIER EN CHEF REALISATEUR",
+        "REALISATEUR",
+        "ELD",
+      ]
+    : [
+        "MAGISTRAT",
+        "GREFFIER DES SERVICES JUDICIERE",
+        "GREFFIER EN CHEF REALISATEUR",
+        "REALISATEUR",
+        "REALISATEUR ADJOINT",
+        "ELD",
+      ];
+
+  const attributionOptions = idDiv === 1
+    ? [
+        "PRESIDENT",
+        "CONSEILLER",
+        "GREFFIER EN CHEF",
+        "GREFFIER",
+        "COMPTABLE",
+        "PRM",
+        "SECRETAIRE",
+        "VAGUEMESTRE",
+        "AGENT DE SURFACE",
+      ]
+    : [
+        "COMMISSAIRE FINANCIERE",
+        "SUBSTITUT",
+        "CHEF SECRETARIAT",
+        "COMPTABLE DES MATIERES",
+        "SECRETAIRE DU PARQUET",
+        "SECRETAIRE",
+        "ARCHIVISTE",
+        "AIDE COMPTABLE",
+      ];
+
   useEffect(() => {
     fetchEmployes();
   }, []);
 
   const fetchEmployes = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/employers/division/${idDiv}`);
+      const res = await axios.get(
+        `http://localhost:5000/api/employers/division/${idDiv}`
+      );
       setEmployes(res.data);
     } catch (err) {
       console.error("Erreur chargement employés :", err);
@@ -39,10 +82,13 @@ const Personnel = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:5000/api/employers/${matriculeEditing}`, {
-          ...form,
-          idDiv,
-        });
+        await axios.put(
+          `http://localhost:5000/api/employers/${matriculeEditing}`,
+          {
+            ...form,
+            idDiv,
+          }
+        );
         alert("Employé modifié !");
       } else {
         await axios.post("http://localhost:5000/api/employers", {
@@ -121,22 +167,37 @@ const Personnel = () => {
           onChange={handleChange}
           required
         />
-        <input
-          type="text"
+
+        {/* 🔹 Sélecteur Corps */}
+        <select
           name="corps"
-          placeholder="Corps"
           value={form.corps}
           onChange={handleChange}
           required
-        />
-        <input
-          type="text"
+        >
+          <option value="">-- Sélectionner un corps --</option>
+          {corpsOptions.map((c, i) => (
+            <option key={i} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+
+        {/* 🔹 Sélecteur Attribution */}
+        <select
           name="attribution"
-          placeholder="Attribution"
           value={form.attribution}
           onChange={handleChange}
           required
-        />
+        >
+          <option value="">-- Sélectionner une attribution --</option>
+          {attributionOptions.map((a, i) => (
+            <option key={i} value={a}>
+              {a}
+            </option>
+          ))}
+        </select>
+
         <select name="genre" value={form.genre} onChange={handleChange}>
           <option value="Homme">Homme</option>
           <option value="Femme">Femme</option>
@@ -167,7 +228,9 @@ const Personnel = () => {
               <td>{emp.Genre}</td>
               <td>
                 <button onClick={() => handleEdit(emp)}>Modifier</button>
-                <button onClick={() => handleDelete(emp.Matricule)}>Supprimer</button>
+                <button onClick={() => handleDelete(emp.Matricule)}>
+                  Supprimer
+                </button>
               </td>
             </tr>
           ))}

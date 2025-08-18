@@ -117,6 +117,7 @@ const DashboardEmployer = () => {
                                             <th className="date-col">Fin</th>
                                             <th className="days-col">Jours</th>
                                             <th className="status-col">Statut</th>
+                                            <th className="obs-col">Observation</th>
                                             <th className="docs-col">Documents</th>
                                         </tr>
                                     </thead>
@@ -137,6 +138,9 @@ const DashboardEmployer = () => {
                                                     }`}>
                                                         {item.statut}
                                                     </span>
+                                                </td>
+                                                <td className="obs-col" data-label="Observation">
+                                                    {item.Observation || "Aucune"}
                                                 </td>
                                                 <td className="docs-col" data-label="Documents">
                                                     <div className="document-links">

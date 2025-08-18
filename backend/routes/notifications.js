@@ -18,6 +18,7 @@ router.get('/demandes/:idDiv', async (req, res) => {
                 c.TotalCP,
                 c.StatueC,
                 c.CheminDem AS lettre,
+                c.ObservationCong AS observationCong,
                 e.Matricule,
                 e.Nom,
                 e.Prenom
@@ -35,11 +36,16 @@ router.get('/demandes/:idDiv', async (req, res) => {
                         SELECT IdTitre FROM utiliser WHERE IdC = ?
                     )
                 `, [conge.IdC]);
-                conge.titres = titres.map(t => t.CheminTitre);
-            } else {
-                conge.titres = [];
+                conge.justificatifs = titres.map(t => t.CheminTitre);
+            } else if (['Maladie', 'Maternité', 'Paternité'].includes(conge.TypeC)){
+                const [ordonnances] = await db.query(`
+                    SELECT CheminOrd FROM ordonnance
+                    WHERE IdC = ?
+                `, [conge.IdC]);
+                conge.justificatifs = ordonnances.map(o => o.CheminOrd);
             }
         }
+
 
         // 📌 Récupération des permissions "En attente"
         const [permissions] = await db.query(`
@@ -53,6 +59,7 @@ router.get('/demandes/:idDiv', async (req, res) => {
                 p.Motif,
                 p.StatueP,
                 p.LienPerm AS lettre,
+                p.ObservationPerm AS observationPerm,
                 e.Matricule,
                 e.Nom,
                 e.Prenom
@@ -77,10 +84,10 @@ router.get('/demandes/:idDiv', async (req, res) => {
 // ✅ 2. Accepter ou refuser une demande de congé
 router.put('/conge/:id', async (req, res) => {
     const { id } = req.params;
-    const { statut } = req.body;
+    const { statut, observationCong } = req.body;
 
     try {
-        await db.query(`UPDATE conge SET StatueC = ? WHERE IdC = ?`, [statut, id]);
+        await db.query(`UPDATE conge SET StatueC = ? , ObservationCong = ? WHERE IdC = ?`, [statut, observationCong, id]);
         res.json({ success: true });
     } catch (e) {
         console.error('Erreur PUT /notifications/conge:', e);
@@ -91,10 +98,10 @@ router.put('/conge/:id', async (req, res) => {
 // ✅ 3. Accepter ou refuser une demande de permission
 router.put('/permission/:id', async (req, res) => {
     const { id } = req.params;
-    const { statut } = req.body;
+    const { statut, observationPerm } = req.body;
 
     try {
-        await db.query(`UPDATE permission SET StatueP = ? WHERE IdP = ?`, [statut, id]);
+        await db.query(`UPDATE permission SET StatueP = ? , ObservationPerm = ? WHERE IdP = ?`, [statut, observationPerm, id]);
         res.json({ success: true });
     } catch (e) {
         console.error('Erreur PUT /notifications/permission:', e);

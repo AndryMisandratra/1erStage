@@ -52,4 +52,13 @@ router.post('/titres', multer({
     res.json({ success: true, path: `/uploads/titres/${req.file.filename}` });
 });
 
+// ===== Route: Ordonnance ====
+router.post('/ordonnances', multer({
+    storage: getStorage('ordonnances'),
+    fileFilter,
+    limits: { fileSize: 5 * 1024 * 1024 }
+}).single('file'), (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'Aucun fichier reçu' });
+    res.json({ success: true, path: `/uploads/ordonnances/${req.file.filename}` });
+});
 module.exports = router;

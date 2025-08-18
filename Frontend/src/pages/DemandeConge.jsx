@@ -12,17 +12,18 @@ const DemandeConge = () => {
     dateDebut: "",
     dateFin: "",
     cheminDemande: null,
-    nbTitres: 0,
+    nbTitres: 1,
     titres: [],
-    anneesSelectionnees: []
+    anneesSelectionnees: [],
+    ordonnance: null
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileUploaded, setFileUploaded] = useState(false);
   const [titreUploads, setTitreUploads] = useState([]);
+  const [ordonnanceUploaded, setOrdonnanceUploaded] = useState(false); // <-- ajout
 
   const anneesPossibles = Array.from({ length: 20 }, (_, i) => 2025 - i);
 
-  // Types de congé disponibles selon le genre
   const typesPossibles = ["Annuel", "Maladie"];
   if (user.genre === "Femme") typesPossibles.push("Maternité");
   if (user.genre === "Homme") typesPossibles.push("Paternité");
@@ -50,7 +51,7 @@ const DemandeConge = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileUpload = async (e, isTitre = false, index = null) => {
+  const handleFileUpload = async (e, isTitre = false, index = null, isOrdonnance = false) => {
     const file = e.target.files[0];
     if (!file || file.type !== "application/pdf") {
         alert("Veuillez sélectionner un fichier PDF valide.");
@@ -65,7 +66,9 @@ const DemandeConge = () => {
     const uploadData = new FormData();
     uploadData.append("file", file);
 
-    const endpoint = isTitre ? "titres" : "demandes";
+    let endpoint = "demandes";
+    if (isTitre) endpoint = "titres";
+    if (isOrdonnance) endpoint = "ordonnances";
 
     try {
         const res = await axios.post(
@@ -82,6 +85,9 @@ const DemandeConge = () => {
                 newTitreUploads[index] = true;
                 setFormData(prev => ({ ...prev, titres: newTitres }));
                 setTitreUploads(newTitreUploads);
+            } else if (isOrdonnance) {
+                setFormData(prev => ({ ...prev, ordonnance: res.data.path }));
+                setOrdonnanceUploaded(true);
             } else {
                 setFormData(prev => ({ ...prev, cheminDemande: res.data.path }));
                 setFileUploaded(true);
@@ -91,65 +97,98 @@ const DemandeConge = () => {
         console.error(err);
         alert(`Erreur: ${err.response?.data?.error || err.message}`);
     }
-};
+  };
 
 
-
-const genererPDF = () => {
+  const genererPDF = (user, formData, totalCP) => {
     const doc = new jsPDF();
+    
+    doc.setFontSize(12);
+    let y = 20
+    // Vérification et conversion des dates
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return isNaN(date) ? dateStr : date.toLocaleDateString('fr-FR');
+    };
+
+    // Police
+    doc.setFont("times", "normal");
 
     // En-tête
-    doc.setFontSize(12);
-    doc.text(`Antananarivo, le ${new Date().toLocaleDateString()}`, 20, 20);
-    doc.text(`${user.nom} ${user.prenom}`, 20, 30);
-    doc.text(`Matricule: ${user.matricule}`, 20, 40);
+    doc.text(`Antananarivo, le ${new Date().toLocaleDateString()}`, 115, y);
 
+    
     // Destinataire
-    doc.text("À", 20, 60);
-    doc.text(
-      "MONSIEUR LE PRESIDENT DU TRIBUNAL FINANCIER D'ANTANANARIVO",
-      20,
-      70
-    );
+    let destinataire ;
+    if (user.IdDiv === 1){
+        destinataire = 'Monsieur LE PRESIDENT DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
+    }else {
+        destinataire =  'Madame LA COMMISSAIRE FINANCIER DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
+    }
+     // Coordonnées de l'expéditeur
+    const expediteur = [
+        `              ${user.nom} ${user.prenom}, IM : ${user.matricule}`,
+        `                                    ${user.attribution}`,
+        '                                           à                  ',
+        destinataire.split(" ").slice(0, 6).join(" "),
+        `                           ${destinataire.split(" ").slice(6, 8).join(" ")}`,           
+    ];
+    expediteur.forEach((line, index) => {
+        if (line) doc.text(line, 85, 30 + (index * 8));
+    });
 
     // Objet
-    doc.setFontSize(14);
-    doc.text("OBJET: Demande de congé", 20, 100);
+    const objet = `OBJET : demande de congé ${formData.type}.`;
+    doc.text(objet, 15, 95);
 
     // Corps de la lettre
-    doc.setFontSize(12);
-    doc.text("Monsieur Le Président,", 20, 120);
+    let corps = [
+      `${destinataire.split(' ').slice(0, 3).join(" ")},`,
+      `J'ai l'honneur de solliciter votre haute bienveillance de bien vouloir`,
+      `m'accorder ma demande de congé de ${totalCP} jours, du ${formData.dateDebut} au ${formData.dateFin}.`
+    ];
 
-    let texteDemande = `Je viens par la présente solliciter votre haute bienveillance pour m'accorder `;
-    texteDemande += `un congé de ${totalCP} jours, du ${dateDebut} au ${dateFin}.`;
-
-    if (type === "Annuel" && anneesSelectionnees.length > 0) {
-      texteDemande += `\n\nCe congé est pris au titre des années: ${anneesSelectionnees.join(
-        ", "
-      )}.`;
+    // ➕ Si Annuel → inclure années
+    if (formData.type === "Annuel" && formData.anneesSelectionnees?.length > 0) {
+      corps.push(`Ce congé est pris au titre des années ${formData.anneesSelectionnees.join(", ")}.`);
     }
 
-    doc.text(texteDemande, 20, 130, { maxWidth: 170 });
+    // Ajout du corps
+    const texteDemande = corps.join("\n");
+    doc.text(texteDemande, 20, 120, { maxWidth: 170, lineHeightFactor: 1.5 });
 
-    // Signature
-    doc.text("Veuillez agréer, Monsieur Le Président,", 20, 180);
-    doc.text("l'expression de ma très haute considération.", 20, 190);
-    doc.text("L'INTÉRESSÉ(E)", 20, 210);
+    // Formule de politesse (ajoutée après le texte)
+    let yFin = 160; // tu peux calculer en fonction de texteDemande
+    const politesse = [
+      `Veuillez agréer, ${destinataire.split(' ').slice(0, 3).join(" ")}, l'expression de ma très haute considération.`,
+      `L'INTERESSE,`
+    ];
+    politesse.forEach((line, index) => {
+      doc.text(line, 20, yFin + (index * 120));
+    });
 
-    doc.save(`demande_conge_${matricule}.pdf`);
+    doc.text(`${user.nom} ${user.prenom}`, 110,200);
+
+    // Sauvegarde du PDF
+    doc.save(`demande_congé_${user.matricule}_${new Date().toLocaleDateString()}.pdf`);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      if (!formData.cheminDemande) {
-        throw new Error("Veuillez téléverser la lettre de demande");
-      }
+      if (!formData.cheminDemande) throw new Error("Veuillez téléverser la lettre de demande");
 
       if (formData.type === "Annuel" && formData.titres.some(t => !t)) {
         throw new Error("Veuillez téléverser tous les titres requis");
+      }
+
+      if ((formData.type === "Maladie" || formData.type === "Maternité" || formData.type === "Paternité") 
+          && !formData.ordonnance) {
+        throw new Error("Veuillez téléverser l’ordonnance médicale");
       }
 
       const payload = {
@@ -163,13 +202,13 @@ const genererPDF = () => {
         CheminDem: formData.cheminDemande,
         TitresPaths: formData.titres,
         Annees: formData.anneesSelectionnees,
+        CheminOrd: formData.ordonnance || null // <-- ajout
       };
 
       const response = await axios.post("http://localhost:5000/api/conges", payload);
       
       if (response.data.success) {
         alert("✅ Demande envoyée avec succès !");
-        // Reset form
         setFormData({
           type: "Annuel",
           dateDebut: "",
@@ -177,10 +216,12 @@ const genererPDF = () => {
           cheminDemande: null,
           nbTitres: 0,
           titres: [],
-          anneesSelectionnees: []
+          anneesSelectionnees: [],
+          ordonnance: null
         });
         setFileUploaded(false);
         setTitreUploads([]);
+        setOrdonnanceUploaded(false);
       }
     } catch (err) {
       console.error(err);
@@ -191,21 +232,15 @@ const genererPDF = () => {
   };
 
   const navigate = useNavigate();
-
-  const handleReturn = () => {
-    navigate('/DashboardEmployer');
-  };
+  const handleReturn = () => navigate('/DashboardEmployer');
 
   return (
     <div className="conge-container">
       <div className="conge-header">
         <div className="header-top">
-            <button 
-                className="back-button"
-                onClick={handleReturn}
-            >
-                <FiArrowLeft /> Retour au tableau de bord
-            </button>    
+          <button className="back-button" onClick={handleReturn}>
+            <FiArrowLeft /> Retour au tableau de bord
+          </button>    
         </div>
         <h1><FiCalendar /> Demande de Congé</h1>
         <p>Formulaire de demande d'autorisation d'absence</p>
@@ -225,115 +260,63 @@ const genererPDF = () => {
         <div className="form-grid">
           <div className="form-card">
             <h2><FiUser /> Informations Personnelles</h2>
-            
             <div className="form-group">
               <label>Nom complet</label>
-              <input 
-                type="text" 
-                value={`${user.nom} ${user.prenom}`} 
-                readOnly 
-                className="readonly"
-              />
+              <input type="text" value={`${user.nom} ${user.prenom}`} readOnly className="readonly"/>
             </div>
-            
             <div className="form-group">
               <label>Matricule</label>
-              <input 
-                type="text" 
-                value={user.matricule} 
-                readOnly 
-                className="readonly"
-              />
+              <input type="text" value={user.matricule} readOnly className="readonly"/>
             </div>
           </div>
 
           <div className="form-card">
             <h2><FiCalendar /> Détails du Congé</h2>
-            
             <div className="form-group">
               <label>Type de congé <span className="required">*</span></label>
-              <select 
-                name="type" 
-                value={formData.type} 
-                onChange={handleChange} 
-                required
-              >
-                {typesPossibles.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
+              <select name="type" value={formData.type} onChange={handleChange} required>
+                {typesPossibles.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label>Date de début <span className="required">*</span></label>
-                <input
-                  type="date"
-                  name="dateDebut"
-                  value={formData.dateDebut}
-                  onChange={handleChange}
-                  required
-                  min={new Date().toISOString().split("T")[0]}
-                />
+                <input type="date" name="dateDebut" value={formData.dateDebut} onChange={handleChange} required
+                  min={new Date().toISOString().split("T")[0]} />
               </div>
-              
               <div className="form-group">
                 <label>Date de fin <span className="required">*</span></label>
-                <input
-                  type="date"
-                  name="dateFin"
-                  value={formData.dateFin}
-                  onChange={handleChange}
-                  required
-                  min={formData.dateDebut || new Date().toISOString().split("T")[0]}
-                />
+                <input type="date" name="dateFin" value={formData.dateFin} onChange={handleChange} required
+                  min={formData.dateDebut || new Date().toISOString().split("T")[0]} />
               </div>
             </div>
 
             <div className="form-group">
               <label>Durée (jours)</label>
-              <input 
-                type="number" 
-                value={totalCP} 
-                readOnly 
-                className="readonly"
-              />
+              <input type="number" value={totalCP} readOnly className="readonly"/>
             </div>
           </div>
 
           {formData.type === "Annuel" && (
             <div className="form-card">
               <h2><FiFileText /> Titres de Congé</h2>
-              
               <div className="form-group">
                 <label>Années concernées <span className="required">*</span></label>
-                <select
-                  multiple
-                  name="anneesSelectionnees"
-                  value={formData.anneesSelectionnees}
+                <select multiple name="anneesSelectionnees" value={formData.anneesSelectionnees} 
                   onChange={(e) => {
                     const options = [...e.target.selectedOptions];
                     const values = options.map(opt => opt.value);
                     setFormData(prev => ({ ...prev, anneesSelectionnees: values }));
-                  }}
-                  required
-                >
-                  {anneesPossibles.map(annee => (
-                    <option key={annee} value={annee}>{annee}</option>
-                  ))}
+                  }} required>
+                  {anneesPossibles.map(annee => <option key={annee} value={annee}>{annee}</option>)}
                 </select>
                 <small className="hint">Maintenez Ctrl/Cmd pour sélection multiple</small>
               </div>
 
               <div className="form-group">
                 <label>Nombre de titres à joindre</label>
-                <input
-                  type="number"
-                  name="nbTitres"
-                  min="0"
-                  value={formData.nbTitres}
-                  onChange={handleChange}
-                />
+                <input type="number" name="nbTitres" min="0" value={formData.nbTitres} onChange={handleChange}/>
               </div>
 
               {Array.from({ length: formData.nbTitres }).map((_, index) => (
@@ -342,13 +325,8 @@ const genererPDF = () => {
                     <FiUpload /> Titre {index + 1} <span className="required">*</span>
                   </label>
                   <div className="upload-area">
-                    <input
-                      type="file"
-                      accept=".pdf"
-                      onChange={(e) => handleFileUpload(e, true, index)}
-                      required
-                      id={`titre-upload-${index}`}
-                    />
+                    <input type="file" accept=".pdf" onChange={(e) => handleFileUpload(e, true, index, false)} required
+                      id={`titre-upload-${index}`}/>
                     <label htmlFor={`titre-upload-${index}`} className="upload-label">
                       {titreUploads[index] ? 'Fichier téléversé ✓' : 'Choisir un fichier'}
                     </label>
@@ -360,53 +338,58 @@ const genererPDF = () => {
 
           <div className="form-card">
             <h2><FiFileText /> Documents Requis</h2>
-            
             <div className="form-group file-upload">
               <label>
                 <FiUpload /> Lettre de demande (PDF) <span className="required">*</span>
               </label>
               <div className="upload-area">
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileUpload}
-                  required
-                  id="lettre-upload"
-                />
+                <input type="file" accept=".pdf" onChange={(e) => handleFileUpload(e, false, null, false)} required id="lettre-upload"/>
                 <label htmlFor="lettre-upload" className="upload-label">
                   {fileUploaded ? 'Fichier téléversé ✓' : 'Choisir un fichier'}
                 </label>
               </div>
             </div>
           </div>
+
+          {(formData.type === "Maladie" || formData.type === "Maternité" || formData.type === "Paternité") && (
+            <div className="form-card">
+              <h2><FiFileText /> Ordonnance médicale</h2>
+              <div className="form-group file-upload">
+                <label>
+                  <FiUpload /> Ordonnance (PDF) <span className="required">*</span>
+                </label>
+                <div className="upload-area">
+                  <input type="file" accept=".pdf" onChange={(e) => handleFileUpload(e, false, null, true)} required id="ordonnance-upload"/>
+                  <label htmlFor="ordonnance-upload" className="upload-label">
+                    {ordonnanceUploaded ? 'Fichier téléversé ✓' : 'Choisir un fichier'}
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
 
         <div className="action-buttons">
           <button 
             type="button" 
-            className="generate-btn"
-            onClick={genererPDF}
+            className="generate-btn" 
+            onClick={() => genererPDF(user, formData, totalCP)}
             disabled={!formData.dateDebut || !formData.dateFin}
           >
             <FiDownload /> Générer modèle
           </button>
+
           
-          <button 
-            type="submit" 
-            className="submit-btn"
+          <button type="submit" className="submit-btn"
             disabled={isSubmitting || !fileUploaded || 
-              (formData.type === "Annuel" && formData.titres.some(t => !t))}
+              (formData.type === "Annuel" && formData.titres.some(t => !t)) ||
+              ((formData.type === "Maladie" || formData.type === "Maternité" || formData.type === "Paternité") && !ordonnanceUploaded)}
           >
-            {isSubmitting ? 'Envoi en cours...' : (
-              <>
-                <FiSend /> Envoyer la demande
-              </>
-            )}
+            {isSubmitting ? 'Envoi en cours...' : <><FiSend /> Envoyer la demande</>}
           </button>
         </div>
       </form>
-
-      
     </div>
   );
 };

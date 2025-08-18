@@ -18,6 +18,7 @@ router.get('/:matricule', async (req, res) => {
                 TotalCP AS jours,
                 StatueC AS statut,
                 CheminDem AS lettre,
+                ObservationCong AS Observation,
                 IdC
             FROM conge
             WHERE Matricule = ?
@@ -33,8 +34,12 @@ router.get('/:matricule', async (req, res) => {
                     )
                 `, [conge.IdC]);
                 conge.justificatifs = titres.map(t => t.CheminTitre);
-            } else {
-                conge.justificatifs = [];
+            } else if (['Maladie', 'Maternité', 'Paternité'].includes(conge.TypeC)){
+                const [ordonnances] = await db.query(`
+                    SELECT CheminOrd FROM ordonnance
+                    WHERE IdC = ?
+                `, [conge.IdC]);
+                conge.justificatifs = ordonnances.map(o => o.CheminOrd);
             }
 
             delete conge.IdC; // ❌ Retirer IdC
@@ -50,7 +55,8 @@ router.get('/:matricule', async (req, res) => {
                 DATE_FORMAT(FinP, '%d-%m-%Y') AS fin,
                 NbrjP AS jours,
                 StatueP AS statut,
-                LienPerm AS lettre
+                LienPerm AS lettre,
+                ObservationPerm AS Observation
             FROM permission
             WHERE Matricule = ?
         `, [matricule]);

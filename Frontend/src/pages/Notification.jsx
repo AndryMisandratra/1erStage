@@ -9,6 +9,9 @@ const Notification = () => {
   const [permissions, setPermissions] = useState([]);
   const [retours, setRetours] = useState([]);
   const [notificationsCount, setNotificationsCount] = useState(0);
+  const [obsConges, setObsConges] = useState({});
+  const [obsPermissions, setObsPermissions] = useState({});
+
 
   const idDiv = user?.idDiv;
 
@@ -40,10 +43,10 @@ const Notification = () => {
     }
   };
 
-  const traiterDemande = async (type, id, statut) => {
+  const traiterDemande = async (type, id, statut, observation) => {
     try {
-      await axios.put(`http://localhost:5000/api/notifications/${type}/${id}`, { statut });
-      fetchAllData(); // Rafraîchir toutes les données
+      await axios.put(`http://localhost:5000/api/notifications/${type}/${id}`, { statut, observation });
+      fetchAllData();
     } catch (err) {
       console.error(err);
       alert("Erreur lors du traitement");
@@ -77,6 +80,7 @@ const Notification = () => {
                 <th>Début</th>
                 <th>Fin</th>
                 <th>Documents</th>
+                <th>Observation</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -89,22 +93,32 @@ const Notification = () => {
                   <td>{formatDate(c.FinC)}</td>
                   <td>
                     <div className="doc-links">
-                      {c.lettre && (
-                        <a href={`http://localhost:5000${c.lettre}`} target="_blank" rel="noopener noreferrer">
-                          <FaFilePdf /> Lettre
+                      {c.lettre ? (
+                        <a href={`http://localhost:5000${c.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                            Lettre
                         </a>
+                      ) : "-"}
+                      {c.justificatifs?.length > 0 && (
+                        c.justificatifs.map((j, i) => (
+                            <a key={i} href={`http://localhost:5000${j}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                                Justif. {i + 1}
+                            </a>
+                        ))
                       )}
-                      {c.titres?.map((t, index) => (
-                        <a key={`titre-${index}`} href={`http://localhost:5000${t}`} target="_blank" rel="noopener noreferrer">
-                          <FaFilePdf /> Justif. {index + 1}
-                        </a>
-                      ))}
                     </div>
                   </td>
                   <td>
-                    <button onClick={() => traiterDemande('conge', c.IdC, 'Accepter')} className="action-btn approve"><FaCheck /></button>
-                    <button onClick={() => traiterDemande('conge', c.IdC, 'Refuser')} className="action-btn reject"><FaTimes /></button>
+                    <input
+                      type="text"
+                      value={obsConges[c.IdC] || ''}
+                      onChange={(e) => setObsConges({...obsConges, [c.IdC]: e.target.value})}
+                    />
                   </td>
+                  <td>
+                    <button onClick={() => traiterDemande('conge', c.IdC, 'Accepter', obsConges[c.IdC] || '')} className="action-btn approve"><FaCheck /></button>
+                    <button onClick={() => traiterDemande('conge', c.IdC, 'Refuser', obsConges[c.IdC] || '')} className="action-btn reject"><FaTimes /></button>
+                  </td>
+
                 </tr>
               ))}
             </tbody>
@@ -124,6 +138,7 @@ const Notification = () => {
                 <th>Début</th>
                 <th>Fin</th>
                 <th>Document</th>
+                <th>Observation</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -136,15 +151,23 @@ const Notification = () => {
                   <td>{formatDate(p.FinP)}</td>
                   <td>
                     {p.lettre ? (
-                      <a href={`http://localhost:5000${p.lettre}`} target="_blank" rel="noopener noreferrer">
-                        <FaFilePdf /> Lettre
+                      <a href={`http://localhost:5000${p.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                          Lettre
                       </a>
                     ) : '-'}
                   </td>
                   <td>
-                    <button onClick={() => traiterDemande('permission', p.IdP, 'Accepter')} className="action-btn approve"><FaCheck /></button>
-                    <button onClick={() => traiterDemande('permission', p.IdP, 'Refuser')} className="action-btn reject"><FaTimes /></button>
+                    <input
+                      type="text"
+                      value={obsPermissions[p.IdP] || ''}
+                      onChange={(e) => setObsPermissions({...obsPermissions, [p.IdP]: e.target.value})}
+                    />
                   </td>
+                  <td>
+                    <button onClick={() => traiterDemande('permission', p.IdP, 'Accepter', obsPermissions[p.IdP] || '')} className="action-btn approve"><FaCheck /></button>
+                    <button onClick={() => traiterDemande('permission', p.IdP, 'Refuser', obsPermissions[p.IdP] || '')} className="action-btn reject"><FaTimes /></button>
+                  </td>
+
                 </tr>
               ))}
             </tbody>
