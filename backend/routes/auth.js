@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
         res.json({ 
             success: true,
             token,
-            isAdmin: user.Attribution === 'Président' || user.Attribution === 'Commissaire Financier',
+            isAdmin: user.Attribution === 'PRESIDENT' || user.Attribution === 'COMMISSAIRE FINANCIER',
             user: {
                 nomUtil: user.NomUtil,
                 matricule: user.Matricule,
