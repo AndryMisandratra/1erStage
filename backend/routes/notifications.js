@@ -84,10 +84,10 @@ router.get('/demandes/:idDiv', async (req, res) => {
 // ✅ 2. Accepter ou refuser une demande de congé
 router.put('/conge/:id', async (req, res) => {
     const { id } = req.params;
-    const { statut, observationCong } = req.body;
+    const { statut, observation } = req.body;
 
     try {
-        await db.query(`UPDATE conge SET StatueC = ? , ObservationCong = ? WHERE IdC = ?`, [statut, observationCong, id]);
+        await db.query(`UPDATE conge SET StatueC = ? , ObservationCong = ? WHERE IdC = ?`, [statut, observation, id]);
         res.json({ success: true });
     } catch (e) {
         console.error('Erreur PUT /notifications/conge:', e);
@@ -98,10 +98,10 @@ router.put('/conge/:id', async (req, res) => {
 // ✅ 3. Accepter ou refuser une demande de permission
 router.put('/permission/:id', async (req, res) => {
     const { id } = req.params;
-    const { statut, observationPerm } = req.body;
+    const { statut, observation } = req.body;
 
     try {
-        await db.query(`UPDATE permission SET StatueP = ? , ObservationPerm = ? WHERE IdP = ?`, [statut, observationPerm, id]);
+        await db.query(`UPDATE permission SET StatueP = ? , ObservationPerm = ? WHERE IdP = ?`, [statut, observation, id]);
         res.json({ success: true });
     } catch (e) {
         console.error('Erreur PUT /notifications/permission:', e);

@@ -121,7 +121,7 @@ const DemandeConge = () => {
     
     // Destinataire
     let destinataire ;
-    if (user.IdDiv === 1){
+    if (user.idDiv === 1){
         destinataire = 'Monsieur LE PRESIDENT DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
     }else {
         destinataire =  'Madame LA COMMISSAIRE FINANCIER DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
