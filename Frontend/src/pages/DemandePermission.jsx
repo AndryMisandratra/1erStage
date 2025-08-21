@@ -148,7 +148,7 @@ const DemandePermission = () => {
             const politesse = [
                 `Veuillez agréer, ${destinataire.split(' ').slice(0, 3).join(" ")}, l'expression de ma très`,
                 `haute considération.`,
-                `                                                           L'INTERESSE,`,
+                `                                      L'INTERESSE,`,
                 
             ];
             

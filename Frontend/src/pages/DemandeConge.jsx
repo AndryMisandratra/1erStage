@@ -162,7 +162,7 @@ const DemandeConge = () => {
     let yFin = 160; // tu peux calculer en fonction de texteDemande
     const politesse = [
       `Veuillez agréer, ${destinataire.split(' ').slice(0, 3).join(" ")}, l'expression de ma très haute considération.`,
-      `L'INTERESSE,`
+      `                                                             L'INTERESSE,`
     ];
     politesse.forEach((line, index) => {
       doc.text(line, 20, yFin + (index * 120));
