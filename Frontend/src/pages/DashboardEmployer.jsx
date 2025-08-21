@@ -15,7 +15,7 @@ const DashboardEmployer = () => {
         setUserData(user);
 
         if (user?.matricule) {
-            axios.get(`http://localhost:5000/api/historique/${user.matricule}`)
+            axios.get(`http://192.168.89.95:5000/api/historique/${user.matricule}`)
                 .then(res => {
                     if (res.data.success) setHistorique(res.data.data);
                     else alert('Erreur de récupération des historiques');
@@ -145,13 +145,13 @@ const DashboardEmployer = () => {
                                                 <td className="docs-col" data-label="Documents">
                                                     <div className="document-links">
                                                         {item.lettre ? (
-                                                            <a href={`http://localhost:5000${item.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                                                            <a href={`http://192.168.89.95:5000${item.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
                                                                 Lettre
                                                             </a>
                                                         ) : "-"}
                                                         {item.justificatifs?.length > 0 && (
                                                             item.justificatifs.map((j, i) => (
-                                                                <a key={i} href={`http://localhost:5000${j}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                                                                <a key={i} href={`http://192.168.89.95:5000${j}`} target="_blank" rel="noopener noreferrer" className="doc-link">
                                                                     Justif. {i + 1}
                                                                 </a>
                                                             ))

@@ -66,7 +66,7 @@ const Personnel = () => {
   const fetchEmployes = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/employers/division/${idDiv}`
+        `http://192.168.89.95:5000/api/employers/division/${idDiv}`
       );
       setEmployes(res.data);
     } catch (err) {
@@ -83,7 +83,7 @@ const Personnel = () => {
     try {
       if (isEditing) {
         await axios.put(
-          `http://localhost:5000/api/employers/${matriculeEditing}`,
+          `http://192.168.89.95:5000/api/employers/${matriculeEditing}`,
           {
             ...form,
             idDiv,
@@ -91,7 +91,7 @@ const Personnel = () => {
         );
         alert("Employé modifié !");
       } else {
-        await axios.post("http://localhost:5000/api/employers", {
+        await axios.post("http://192.168.89.95:5000/api/employers", {
           ...form,
           idDiv,
         });
@@ -130,7 +130,7 @@ const Personnel = () => {
   const handleDelete = async (matricule) => {
     if (!window.confirm("Supprimer cet employé ?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/employers/${matricule}`);
+      await axios.delete(`http://192.168.89.95:5000/api/employers/${matricule}`);
       fetchEmployes();
     } catch (err) {
       console.error("Erreur suppression :", err);

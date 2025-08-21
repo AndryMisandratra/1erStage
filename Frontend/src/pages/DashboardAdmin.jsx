@@ -23,7 +23,7 @@ const DashboardAdmin = () => {
 
   const fetchAllData = async () => {
     try {
-      const countRes = await axios.get(`http://localhost:5000/api/notifications/count/${idDiv}`);
+      const countRes = await axios.get(`http://192.168.89.95:5000/api/notifications/count/${idDiv}`);
       if (countRes.data.success) {
         setNotificationsCount(countRes.data.count);
       }

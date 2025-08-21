@@ -72,7 +72,7 @@ const DemandeConge = () => {
 
     try {
         const res = await axios.post(
-            `http://localhost:5000/api/upload/${endpoint}`,
+            `http://192.168.89.95:5000/api/upload/${endpoint}`,
             uploadData,
             { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -205,7 +205,7 @@ const DemandeConge = () => {
         CheminOrd: formData.ordonnance || null // <-- ajout
       };
 
-      const response = await axios.post("http://localhost:5000/api/conges", payload);
+      const response = await axios.post("http://192.168.89.95:5000/api/conges", payload);
       
       if (response.data.success) {
         alert("✅ Demande envoyée avec succès !");

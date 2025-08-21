@@ -24,16 +24,16 @@ const Notification = () => {
   const fetchAllData = async () => {
     try {
       // 📌 1. Demandes en attente
-      const demandesRes = await axios.get(`http://localhost:5000/api/notifications/demandes/${idDiv}`);
+      const demandesRes = await axios.get(`http://192.168.89.95:5000/api/notifications/demandes/${idDiv}`);
       setConges(demandesRes.data.conges || []);
       setPermissions(demandesRes.data.permissions || []);
 
       // 📌 2. Rappels
-      const rappelsRes = await axios.get(`http://localhost:5000/api/notifications/rappels/${idDiv}`);
+      const rappelsRes = await axios.get(`http://192.168.89.95:5000/api/notifications/rappels/${idDiv}`);
       setRetours(rappelsRes.data.retours || []);
 
       // 📌 3. Compteur global
-      const countRes = await axios.get(`http://localhost:5000/api/notifications/count/${idDiv}`);
+      const countRes = await axios.get(`http://192.168.89.95:5000/api/notifications/count/${idDiv}`);
       if (countRes.data.success) {
         setNotificationsCount(countRes.data.count);
       }
@@ -45,7 +45,7 @@ const Notification = () => {
 
   const traiterDemande = async (type, id, statut, observation) => {
     try {
-      await axios.put(`http://localhost:5000/api/notifications/${type}/${id}`, { statut, observation });
+      await axios.put(`http://192.168.89.95:5000/api/notifications/${type}/${id}`, { statut, observation });
       fetchAllData();
     } catch (err) {
       console.error(err);
@@ -94,13 +94,13 @@ const Notification = () => {
                   <td>
                     <div className="doc-links">
                       {c.lettre ? (
-                        <a href={`http://localhost:5000${c.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                        <a href={`http://192.168.89.95:5000${c.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
                             Lettre
                         </a>
                       ) : "-"}
                       {c.justificatifs?.length > 0 && (
                         c.justificatifs.map((j, i) => (
-                            <a key={i} href={`http://localhost:5000${j}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                            <a key={i} href={`http://192.168.89.95:5000${j}`} target="_blank" rel="noopener noreferrer" className="doc-link">
                                 Justif. {i + 1}
                             </a>
                         ))
@@ -151,7 +151,7 @@ const Notification = () => {
                   <td>{formatDate(p.FinP)}</td>
                   <td>
                     {p.lettre ? (
-                      <a href={`http://localhost:5000${p.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
+                      <a href={`http://192.168.89.95:5000${p.lettre}`} target="_blank" rel="noopener noreferrer" className="doc-link">
                           Lettre
                       </a>
                     ) : '-'}

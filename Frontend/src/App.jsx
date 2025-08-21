@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './context/Authcontext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import { useContext, useState, useEffect } from 'react';
 import SplashScreen from "./pages/SplashScreen";
 import Login from './pages/Login';

@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     //Connexion
     const login = async (nomUtil, mdp) => {
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', { 
+            const res = await axios.post('http://192.168.89.95:5000/api/auth/login', { 
                 nomUtil, 
                 mdp 
             });

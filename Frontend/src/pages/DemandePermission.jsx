@@ -64,7 +64,7 @@ const DemandePermission = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/upload/permissions',
+                'http://192.168.89.95:5000/api/upload/permissions',
                 uploadData,
                 {
                     headers: {
@@ -106,7 +106,7 @@ const DemandePermission = () => {
             
             // Destinataire
             let destinataire ;
-            if (user.IdDiv === 1){
+            if (user.idDiv === 1){
                 destinataire = 'Monsieur LE PRESIDENT DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
             }else {
                 destinataire =  'Madame LA COMMISSAIRE FINANCIER DU TRIBUNAL FINANCIER D\'ANTANANARIVO' ;
@@ -180,7 +180,7 @@ const DemandePermission = () => {
             }
 
             // Envoi
-            const response = await axios.post('http://localhost:5000/api/permissions', formData);
+            const response = await axios.post('http://192.168.89.95:5000/api/permissions', formData);
 
             if (response.data.success) {
                 alert('✅ Demande envoyée avec succès !');

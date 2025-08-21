@@ -1,0 +1,512 @@
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+C:\USERS\PC-ACCUEIL\APPDATA\ROAMING\NPM\SERVE.CMD:1
+@ECHO off
+^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1515:18)
+    at Module._compile (node:internal/modules/cjs/loader:1537:20)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0
+node:internal/modules/cjs/loader:1252
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\PC-ACCUEIL\Downloads\Gestion de Congé\1erStage\Frontend\dist'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1249:15)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.12.0

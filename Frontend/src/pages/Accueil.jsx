@@ -20,7 +20,7 @@ const Accueil = () => {
       const annee = date.getFullYear();
 
       axios
-        .get(`http://localhost:5000/api/accueil/${idDiv}?mois=${mois}&annee=${annee}`)
+        .get(`http://192.168.89.95:5000/api/accueil/${idDiv}?mois=${mois}&annee=${annee}`)
         .then((res) => {
           if (res.data.success) {
             setAbsences(res.data.data);
