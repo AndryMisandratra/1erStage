@@ -167,10 +167,7 @@ const DemandePermission = () => {
         setIsSubmitting(true);
 
         try {
-            // Validation
-            if (formData.NbrjP > 3) {
-                throw new Error('La permission ne peut excéder 3 jours');
-            }
+
 
             if (!formData.LienPerm) {
                 throw new Error('Veuillez téléverser votre demande en PDF');

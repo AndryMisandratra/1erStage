@@ -43,7 +43,7 @@ const Personnel = () => {
         "GREFFIER EN CHEF",
         "GREFFIER",
         "COMPTABLE",
-        "PRM",
+        "PRMP",
         "SECRETAIRE",
         "VAGUEMESTRE",
         "AGENT DE SURFACE",

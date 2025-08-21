@@ -35,12 +35,14 @@ router.post('/create', async (req, res) => {
         }
 
         // Vérifier si le compte existe déjà
-        if (employe[0].NomUtil !== null || employe[0].Mdp !== null) {
+        if ((employe[0].NomUtil && employe[0].NomUtil.trim() !== '') || 
+            (employe[0].Mdp && employe[0].Mdp.trim() !== '')) {
             return res.status(409).json({
                 success: true,
                 message: 'Un compte existe déjà pour ce matricule'
             });
         }
+
 
         // Mettre à jour le compte
         await db.query(

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CreateAccount.css';
+import axios from 'axios';
 
 const CreateAccount = () => {
     const [formData, setFormData] = useState({
@@ -14,14 +15,16 @@ const CreateAccount = () => {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        const digitsOnly = e.target.value.replace(/\D/g, '').slice(0,6);
         const { name, value } = e.target;
+
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            [name]: name === "matricule" 
+                ? value.replace(/\D/g, '').slice(0,6) // seulement chiffres, max 6
+                : value
         }));
-        setFormData({ ...formData, matricule: digitsOnly });
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,14 +35,25 @@ const CreateAccount = () => {
         }
 
         try {
-            // Simulation de création de compte
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            setSuccess(true);
-            setTimeout(() => navigate('/login'), 2000);
+            const res = await axios.post('http://192.168.89.95:5000/api/account/create', {
+                matricule: formData.matricule,
+                nomUtil: formData.nomUtil,
+                mdp: formData.mdp
+            });
+
+            if (res.data.success) {
+                setSuccess(true);
+                setError('');
+                setTimeout(() => navigate('/login'), 2000);
+            } else {
+                setError(res.data.message);
+            }
         } catch (err) {
-            setError('Erreur lors de la création du compte');
+            console.error(err.response?.data || err);
+            setError(err.response?.data?.message || 'Erreur lors de la création du compte');
         }
     };
+
 
     return (
         <div className="create-account-container">
