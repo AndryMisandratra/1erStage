@@ -28,10 +28,7 @@ const DemandePermission = () => {
             const diffTime = fin - debut;
             const jours = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
             
-            if (jours > 3) {
-                alert('La permission ne peut excéder 3 jours');
-                setFormData(prev => ({ ...prev, FinP: '', NbrjP: 0 }));
-            } else if (jours < 1) {
+            if (jours < 1) {
                 alert('La date de fin doit être après la date de début');
                 setFormData(prev => ({ ...prev, FinP: '', NbrjP: 0 }));
             } else {
@@ -302,8 +299,6 @@ const DemandePermission = () => {
                                 <option value="">Sélectionnez un motif</option>
                                 <option value="Familiale">familiale</option>
                                 <option value="Personnelle">personnelle</option>
-                                <option value="Médicale">médicale</option>
-                                <option value="Officielle">Mission officielle</option>
                                 <option value="Décè">Décè</option>
                             </select>
                         </div>

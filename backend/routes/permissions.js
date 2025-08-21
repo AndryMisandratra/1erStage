@@ -5,13 +5,6 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     try {
         const { TypeP, DateDemPerm, DebP, FinP, NbrjP, Motif, LienPerm, Matricule } = req.body;
-        
-        if (NbrjP > 3) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'La permission ne peut excéder 3 jours' 
-            });
-        }
 
         const [result] = await db.query(
             `INSERT INTO PERMISSION 

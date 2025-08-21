@@ -129,7 +129,7 @@ const DemandeConge = () => {
      // Coordonnées de l'expéditeur
     const expediteur = [
         `              ${user.nom} ${user.prenom}, IM : ${user.matricule}`,
-        `                                    ${user.attribution}`,
+        `                                  ${user.attribution}`,
         '                                           à                  ',
         destinataire.split(" ").slice(0, 6).join(" "),
         `                           ${destinataire.split(" ").slice(6, 8).join(" ")}`,           
@@ -162,10 +162,10 @@ const DemandeConge = () => {
     let yFin = 160; // tu peux calculer en fonction de texteDemande
     const politesse = [
       `Veuillez agréer, ${destinataire.split(' ').slice(0, 3).join(" ")}, l'expression de ma très haute considération.`,
-      `                                                             L'INTERESSE,`
+      `                                                                                       L'INTERESSE,`
     ];
     politesse.forEach((line, index) => {
-      doc.text(line, 20, yFin + (index * 120));
+      doc.text(line, 20, yFin + (index * 10));
     });
 
     doc.text(`${user.nom} ${user.prenom}`, 110,200);
